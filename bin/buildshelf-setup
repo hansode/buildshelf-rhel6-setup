@@ -20,8 +20,14 @@ function buildshelf_setup_git() {
 
   cd ${target_dir}
 
-  [[ -d .git       ]] || git init
-  [[ -f .gitmodule ]] || git submodule add https://github.com/hansode/buildbook-rhel6.git vendor/buildbook-rhel6
+  if ! [[ -d .git ]]; then
+    git init
+  fi
+
+  if ! [[ -f .gitmodule ]]; then
+    git submodule add https://github.com/hansode/buildbook-rhel6.git vendor/buildbook-rhel6
+    git submodule add https://github.com/hansode/vmbuilder.git       vendor/vmbuilder
+  fi
 }
 
 function buildshelf_cli() {
