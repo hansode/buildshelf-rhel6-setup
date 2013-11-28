@@ -1,1 +1,0 @@
-guestroot/etc/sysconfig/iptables /etc/sysconfig/iptables mode=644
