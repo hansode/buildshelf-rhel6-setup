@@ -1,0 +1,38 @@
+#!/bin/bash
+#
+# description:
+#
+# requires:
+#  bash
+#  rsync
+#
+
+function buildshelf_deploy() {
+  local target_dir=${1}
+  [[ -n "${target_dir}" ]] || { echo "[ERROR] Invalid argument: target_dir:${target_dir} (${BASH_SOURCE[0]##*/}:${LINENO})" >&2; return 1; }
+
+  rsync -av ${BASH_SOURCE[0]%/*}/../templates/ ${target_dir}
+}
+
+function buildshelf_setup_git() {
+  local target_dir=${1}
+  [[ -n "${target_dir}" ]] || { echo "[ERROR] Invalid argument: target_dir:${target_dir} (${BASH_SOURCE[0]##*/}:${LINENO})" >&2; return 1; }
+
+  cd ${target_dir}
+
+  [[ -d .git       ]] || git init
+  [[ -f .gitmodule ]] || git submodule add https://github.com/hansode/buildbook-rhel6.git vendor/buildbook-rhel6
+}
+
+function buildshelf_cli() {
+  local target_dir=${1:-vmbuilder-box}
+  [[ -n "${target_dir}" ]] || { echo "[ERROR] Invalid argument: target_dir:${target_dir} (${BASH_SOURCE[0]##*/}:${LINENO})" >&2; return 1; }
+
+  buildshelf_deploy ${target_dir}
+  (buildshelf_setup_git ${target_dir})
+}
+
+# CLI
+if [[ "${BASH_SOURCE[0]##*/}" == "buildshelf-setup" ]]; then
+  buildshelf_cli "${@}"
+fi
