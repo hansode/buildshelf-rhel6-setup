@@ -1,8 +1,8 @@
-VMS=skel
+VMS=kvm.skel
 
 all:
 
-skel:
+kvm.skel:
 	(cd $@ && make)
 
 .PHONY: $(VMS)
