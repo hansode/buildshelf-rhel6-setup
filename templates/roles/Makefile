@@ -1,20 +1,8 @@
-VMS=kvm.host-vz vz.centos6 vz.serf vz.serf.apache vz.serf.haproxy
+VMS=skel
 
 all:
 
-kvm.host-vz:
-	(cd $@ && make)
-
-vz.centos6:
-	(cd $@ && make)
-
-vz.serf:
-	(cd $@ && make)
-
-vz.serf.apache:
-	(cd $@ && make)
-
-vz.serf.haproxy:
+skel:
 	(cd $@ && make)
 
 .PHONY: $(VMS)
