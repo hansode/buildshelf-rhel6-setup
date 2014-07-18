@@ -1,7 +1,21 @@
 SHELL=/bin/bash
-NAME=`basename ${PWD}`
 
 all:
+
+build:
 	time sudo ../../vendor/vmbuilder/kvm/rhel/6/vmbuilder.sh --config-path ./vmbuilder.conf
-	cd rootfs && sudo tar zcpf ../$(NAME).`arch`.tar.gz .
-	sudo rm -rf rootfs
+
+clean:
+	@rm -f box-disk1.*
+
+box-disk1.vmdk:
+	time ../../vendor/vmbuilder/kvm/rhel/6/misc/raw2vmdk.sh box-disk1.raw
+
+run.sh:
+	../../vendor/vmbuilder/kvm/rhel/6/misc/kvm-ctl.sh render-runscript --config-path ./vmbuilder.conf > $@
+	chmod +x run.sh
+
+run:
+	sudo ../../vendor/vmbuilder/kvm/rhel/6/misc/kvm-ctl.sh start --image-path=./box-disk1.raw --brname=vboxbr0
+
+.PHONY: run.sh
